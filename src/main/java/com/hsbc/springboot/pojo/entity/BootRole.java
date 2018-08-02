@@ -9,7 +9,7 @@ public class BootRole {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Short id;
+    private Integer id;
 
     @Column(length = 50)
     private String name;
@@ -17,17 +17,11 @@ public class BootRole {
     private Date createTime;
     private Date updateTime;
 
-    @Column(length = 1)
-    private String deleteFlag;
-
-    @Column(length = 50)
-    private String authLevel;
-
-    public Short getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Short id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -55,19 +49,13 @@ public class BootRole {
         this.updateTime = updateTime;
     }
 
-    public String getDeleteFlag() {
-        return deleteFlag;
-    }
-
-    public void setDeleteFlag(String deleteFlag) {
-        this.deleteFlag = deleteFlag;
-    }
-
-    public String getAuthLevel() {
-        return authLevel;
-    }
-
-    public void setAuthLevel(String authLevel) {
-        this.authLevel = authLevel;
+    @Override
+    public String toString() {
+        return "BootRole{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                '}';
     }
 }

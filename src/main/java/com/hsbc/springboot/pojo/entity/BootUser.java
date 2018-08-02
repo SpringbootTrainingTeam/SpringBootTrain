@@ -2,6 +2,7 @@ package com.hsbc.springboot.pojo.entity;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "boot_user")
@@ -9,25 +10,27 @@ public class BootUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Short id;
-
-    @Column(length = 50)
+    private Integer id;
     private String username;
-
-    @Column(length = 50)
     private String password;
+    @ManyToMany(cascade = {CascadeType.REFRESH},fetch = FetchType.EAGER)
+    private List<BootRole> roles;
 
     private Date createTime;
     private Date updateTime;
 
-    @Column(length = 1)
-    private String deleteTag;
+    public BootUser() {}
 
-    public short getId() {
+    public BootUser(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(short id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -47,6 +50,14 @@ public class BootUser {
         this.password = password;
     }
 
+    public List<BootRole> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<BootRole> roles) {
+        this.roles = roles;
+    }
+
     public Date getCreateTime() {
         return createTime;
     }
@@ -63,11 +74,15 @@ public class BootUser {
         this.updateTime = updateTime;
     }
 
-    public String getDeleteTag() {
-        return deleteTag;
-    }
-
-    public void setDeleteTag(String deleteTag) {
-        this.deleteTag = deleteTag;
+    @Override
+    public String toString() {
+        return "BootUser{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", roles=" + roles +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                '}';
     }
 }
