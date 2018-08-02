@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: order
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    username: panyuanyuan
+    password: ZTEywz0225
+    url: jdbc:mysql://shopping.fireworm.online:3306/jiankun_test
