@@ -1,6 +1,8 @@
 package com.hsbc.springboot.controller;
 
+import com.hsbc.springboot.pojo.entity.BootFile;
 import com.hsbc.springboot.pojo.vo.UploadFileResponse;
+import com.hsbc.springboot.service.api.FileUploadService;
 import com.hsbc.springboot.service.impl.FileUploadServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +23,9 @@ import java.util.stream.Collectors;
 
 @RestController
 public class FileUploadController {
+
+    @Autowired
+    private FileUploadService fileUploadService;
 
     private static final Logger logger = LoggerFactory.getLogger(FileUploadController.class);
 
@@ -80,5 +85,10 @@ public class FileUploadController {
     @GetMapping("/")
     public String indexUI() {
         return "Hello World";
+    }
+
+    @GetMapping("findAll")
+    public List<BootFile> findAll(){
+        return fileStorageService.fileList();
     }
 }

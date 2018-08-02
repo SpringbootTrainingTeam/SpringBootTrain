@@ -1,17 +1,23 @@
 package com.hsbc.springboot.service.impl;
 
 import com.hsbc.springboot.config.FileStorageProperties;
+import com.hsbc.springboot.dao.BootUserRepositoty;
+import com.hsbc.springboot.dao.FileUploadRepository;
 import com.hsbc.springboot.exception.FileStorageException;
 import com.hsbc.springboot.exception.MyFileNotFoundException;
-import com.hsbc.springboot.pojo.dto.FileDTO;
+import com.hsbc.springboot.pojo.entity.BootFile;
+import com.hsbc.springboot.pojo.entity.BootUser;
 import com.hsbc.springboot.service.api.FileUploadService;
-import org.hibernate.criterion.Example;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.data.domain.Example;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
+import sun.plugin.liveconnect.SecurityContextHelper;
+
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
@@ -22,6 +28,9 @@ import java.util.List;
 
 @Service
 public class FileUploadServiceImpl implements FileUploadService {
+
+    @Autowired
+    private FileUploadRepository fileUploadRepository;
 
     private final Path fileStorageLocation;
 
@@ -82,9 +91,23 @@ public class FileUploadServiceImpl implements FileUploadService {
         }
     }
 
+    @Autowired
+    private BootUserRepositoty bootUserRepositoty;
+
+    /**
+     *  findAll BootFile where userId = userId
+     * @param userId user id
+     * @return
+     */
     @Override
-    public List<FileDTO> fileList(Short userId) {
-        return null;
+    public List<BootFile> fileList() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        BootUser bootUser = bootUserRepositoty.findByUsername(username);
+        BootFile bootFile = new BootFile();
+        bootFile.setUserId(bootUser.getId());
+        Example<BootFile> example = Example.of(bootFile);
+        List<BootFile> bootFiles = fileUploadRepository.findAll( example);
+        return bootFiles;
     }
 
     @Override

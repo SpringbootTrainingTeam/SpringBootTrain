@@ -1,6 +1,6 @@
 package com.hsbc.springboot.service.api;
 
-import com.hsbc.springboot.pojo.dto.FileDTO;
+import com.hsbc.springboot.pojo.entity.BootFile;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,11 +26,9 @@ public interface FileUploadService {
 
     /**
      * find file list by user id
-     *
-     * @param userId user id
      * @return user's file list
      */
-    List<FileDTO> fileList(Short userId);
+    List<BootFile> fileList();
 
     /**
      * delete file by file id
