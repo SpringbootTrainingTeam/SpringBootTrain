@@ -4,7 +4,7 @@ import com.hsbc.springboot.pojo.entity.BootUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
-public interface UserRepository extends JpaRepository<BootUser, Short>, PagingAndSortingRepository<BootUser, Short> {
+public interface UserRepository extends JpaRepository<BootUser, Integer>, PagingAndSortingRepository<BootUser, Integer> {
 
     @Override
     <S extends BootUser> S save(S s);

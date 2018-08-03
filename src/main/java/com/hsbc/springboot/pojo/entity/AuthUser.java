@@ -3,10 +3,10 @@ package com.hsbc.springboot.pojo.entity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
 
 public class AuthUser extends BootUser implements UserDetails {
     @Override
@@ -21,12 +21,12 @@ public class AuthUser extends BootUser implements UserDetails {
 
     @Override
     public String getPassword() {
-        return this.getPassword();
+        return super.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return this.getUsername();
+        return super.getUsername();
     }
 
     @Override
