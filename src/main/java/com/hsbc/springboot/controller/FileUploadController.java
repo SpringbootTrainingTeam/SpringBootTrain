@@ -87,7 +87,7 @@ public class FileUploadController {
         return "Hello World";
     }
 
-    @GetMapping("findAll")
+    @GetMapping("/findAll")
     public List<BootFile> findAll(){
         return fileStorageService.fileList();
     }

@@ -3,7 +3,9 @@ package com.hsbc.springboot.dao;
 import com.hsbc.springboot.pojo.entity.BootUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface UserRepository extends JpaRepository<BootUser, Short>, PagingAndSortingRepository<BootUser, Short> {
 
     @Override

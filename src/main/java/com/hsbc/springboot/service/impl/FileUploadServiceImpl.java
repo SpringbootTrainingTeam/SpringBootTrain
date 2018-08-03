@@ -1,8 +1,8 @@
 package com.hsbc.springboot.service.impl;
 
 import com.hsbc.springboot.config.FileStorageProperties;
-import com.hsbc.springboot.dao.BootUserRepositoty;
 import com.hsbc.springboot.dao.FileUploadRepository;
+import com.hsbc.springboot.dao.UserRepository;
 import com.hsbc.springboot.exception.FileStorageException;
 import com.hsbc.springboot.exception.MyFileNotFoundException;
 import com.hsbc.springboot.pojo.entity.BootFile;
@@ -16,7 +16,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
-import sun.plugin.liveconnect.SecurityContextHelper;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -92,17 +91,16 @@ public class FileUploadServiceImpl implements FileUploadService {
     }
 
     @Autowired
-    private BootUserRepositoty bootUserRepositoty;
+    private UserRepository userRepository;
 
     /**
      *  findAll BootFile where userId = userId
-     * @param userId user id
      * @return
      */
     @Override
     public List<BootFile> fileList() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        BootUser bootUser = bootUserRepositoty.findByUsername(username);
+        BootUser bootUser = userRepository.findByUsername(username);
         BootFile bootFile = new BootFile();
         bootFile.setUserId(bootUser.getId());
         Example<BootFile> example = Example.of(bootFile);
