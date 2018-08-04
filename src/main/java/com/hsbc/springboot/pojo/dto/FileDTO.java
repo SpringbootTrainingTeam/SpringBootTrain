@@ -10,7 +10,7 @@ public class FileDTO {
 
     private String name;
 
-    private Short userId;
+    private Integer userId;
 
     private Date uploadTime;
 
@@ -38,11 +38,11 @@ public class FileDTO {
         this.name = name;
     }
 
-    public Short getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(Short userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 

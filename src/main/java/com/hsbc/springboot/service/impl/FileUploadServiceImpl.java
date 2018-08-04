@@ -7,12 +7,11 @@ import com.hsbc.springboot.exception.FileStorageException;
 import com.hsbc.springboot.exception.MyFileNotFoundException;
 import com.hsbc.springboot.pojo.dto.FileDTO;
 import com.hsbc.springboot.pojo.entity.BootFile;
-import com.hsbc.springboot.pojo.entity.BootUser;
+import com.hsbc.springboot.pojo.entity.AuthUser;
 import com.hsbc.springboot.service.api.FileUploadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
-import org.springframework.data.domain.Example;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -23,20 +22,19 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
 public class FileUploadServiceImpl implements FileUploadService {
 
-    @Autowired
-    private FileUploadRepository fileUploadRepository;
-
-    @Autowired
-    private UserRepository userRepository;
-
     private final Path fileStorageLocation;
 
     private final FileStorageProperties fileStorageProperties;
+
+    @Autowired
+    private FileUploadRepository fileUploadRepository;
 
     @Autowired
     public FileUploadServiceImpl(FileStorageProperties fileStorageProperties) {
@@ -69,12 +67,21 @@ public class FileUploadServiceImpl implements FileUploadService {
             Path targetLocation = this.fileStorageLocation.resolve(fileName);
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 
+            BootFile bootFile = new BootFile();
+            bootFile.setName(fileName);
+            bootFile.setPath(targetLocation.toString());
+            bootFile.setUploadTime(new Date());
+
+            AuthUser authUser  = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            bootFile.setUserId(authUser.getId());
+
+            fileUploadRepository.save(bootFile);
+
             return fileName;
         } catch (IOException ex) {
             throw new FileStorageException("Could not store file " + fileName + ". Please try again!", ex);
         }
     }
-
 
     /**
      * @see FileUploadService#loadFileAsResource(String)
@@ -94,8 +101,21 @@ public class FileUploadServiceImpl implements FileUploadService {
     }
 
     @Override
-    public List<FileDTO> fileList(Short userId) {
-        return null;
+    public List<FileDTO> fileListbyUserId() {
+        AuthUser authUser  = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        List<BootFile> bootFiles = fileUploadRepository.findByUserId(authUser.getId());
+        ArrayList<FileDTO> fileDTOS = new ArrayList<>();
+        bootFiles.stream().forEach(bootFile -> {
+            FileDTO fileDTO = new FileDTO();
+            fileDTO.setId(bootFile.getId());
+            fileDTO.setName(bootFile.getName());
+            fileDTO.setPath(bootFile.getPath());
+            fileDTO.setUploadTime(bootFile.getUploadTime());
+            fileDTO.setUserId(bootFile.getUserId());
+            fileDTOS.add(fileDTO);
+        });
+
+        return fileDTOS;
     }
 
     /**
@@ -104,7 +124,6 @@ public class FileUploadServiceImpl implements FileUploadService {
      */
     @Override
     public void deleteFileById(Long id) {
-
         fileUploadRepository.deleteById(id);
     }
 }

@@ -26,11 +26,9 @@ public interface FileUploadService {
 
     /**
      * find file list by user id
-     *
-     * @param userId user id
      * @return user's file list
      */
-    List<FileDTO> fileList(Short userId);
+    List<FileDTO> fileListbyUserId();
 
     /**
      * delete file by file id
