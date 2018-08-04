@@ -13,9 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
@@ -28,6 +30,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+
+import static org.springframework.transaction.annotation.Propagation.REQUIRED;
 
 @Service
 public class FileUploadServiceImpl implements FileUploadService {
@@ -56,6 +60,7 @@ public class FileUploadServiceImpl implements FileUploadService {
      * @see FileUploadService#storeFile(MultipartFile)
      */
     @Override
+    @Transactional(propagation = REQUIRED)
     public String storeFile(MultipartFile file) {
         // Normalize file name
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
@@ -75,8 +80,15 @@ public class FileUploadServiceImpl implements FileUploadService {
             bootFile.setPath(targetLocation.toString());
             bootFile.setUploadTime(new Date());
 
-            AuthUser authUser  = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            bootFile.setUserId(authUser.getId());
+            SecurityContext context = SecurityContextHolder.getContext();
+
+            if (context.getAuthentication() != null) {
+                AuthUser authUser = (AuthUser) context.getAuthentication().getPrincipal();
+                bootFile.setUserId(authUser.getId());
+            }
+
+//            AuthUser authUser  = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
 
             fileUploadRepository.save(bootFile);
 
@@ -124,5 +136,9 @@ public class FileUploadServiceImpl implements FileUploadService {
     @Override
     public void deleteFileById(Long id) {
         fileUploadRepository.deleteById(id);
+    }
+
+    public Path getFileStorageLocation() {
+        return fileStorageLocation;
     }
 }
