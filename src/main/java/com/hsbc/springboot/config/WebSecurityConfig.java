@@ -36,22 +36,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    public void configure(WebSecurity web) {
-        web.ignoring().antMatchers("/static/**", "/templates/**");
-    }
-
-    @Override
     protected void configure(HttpSecurity http) throws Exception {
-//        http.p
-//                .antMatchers("/{id}").permitAll()
-//                .anyRequest().authenticated()
-//                .and().formLogin().loginPage("/login")
-//                .loginProcessingUrl("/login").defaultSuccessUrl("/personal_center",true)
-//                .failureUrl("/sign_in?error").permitAll()
-//                .and().sessionManagement().invalidSessionUrl("/sign_in")
-//                .and().rememberMe().tokenValiditySeconds(1209600)
-//                .and().logout().logoutSuccessUrl("/sign_in").permitAll()
-//                .and().csrf().disable();
+        http.authorizeRequests().antMatchers("/css/**", "/js/**", "/img/**", "/layui/**").permitAll()
+                .anyRequest().authenticated()
+
+                .and().formLogin().loginPage("/index")
+                .loginProcessingUrl("/login").defaultSuccessUrl("/repository",true)
+                .failureUrl("/login?error").permitAll()
+                .and().sessionManagement().invalidSessionUrl("/sign_in")
+                .and().rememberMe().tokenValiditySeconds(1209600)
+                .and().logout().logoutSuccessUrl("/logout").permitAll()
+                .and().csrf().disable();
     }
 
     @Bean

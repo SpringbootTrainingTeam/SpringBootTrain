@@ -4,10 +4,10 @@ import com.hsbc.springboot.pojo.entity.BootUser;
 import com.hsbc.springboot.pojo.form.BootUserForm;
 import com.hsbc.springboot.pojo.vo.BootUserVo;
 import com.hsbc.springboot.service.api.BootUserService;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+@RequestMapping("/user")
 @RestController
 public class UserController {
 
