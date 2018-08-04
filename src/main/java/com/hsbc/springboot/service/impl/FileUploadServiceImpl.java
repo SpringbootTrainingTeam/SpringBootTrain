@@ -2,7 +2,6 @@ package com.hsbc.springboot.service.impl;
 
 import com.hsbc.springboot.config.FileStorageProperties;
 import com.hsbc.springboot.dao.FileUploadRepository;
-import com.hsbc.springboot.dao.UserRepository;
 import com.hsbc.springboot.exception.FileStorageException;
 import com.hsbc.springboot.exception.MyFileNotFoundException;
 import com.hsbc.springboot.pojo.dto.FileDTO;
