@@ -23,52 +23,45 @@
 	  </div>
 
 	  <div class='login_fields'>
-	    <div class='login_fields__user'>
-	      <div class='icon'>
-	        <img alt="" th:src="@{/img/user_icon_copy.png}">
-	      </div>
-	      <input name="login" placeholder='用户名' maxlength="16" type='text' autocomplete="off" value="18092853734"/>
-	        <div class='validation'>
-	          <img alt="" th:src="@{/img/tick.png}">
-	        </div>
-	    </div>
-	    <div class='login_fields__password'>
-	      <div class='icon'>
-	        <img alt="" th:src="@{/img/lock_icon_copy.png}">
-	      </div>
-	      <input name="pwd" placeholder='密码' maxlength="16" type='text' autocomplete="off" value="123"/>
-	      <div class='validation'>
-	        <img alt="" th:src="@{/img/tick.png}">
-	      </div>
-	    </div>
-	    <div class='login_fields__password'>
-	      <div class='icon'>
-	        <img alt="" th:src="@{/img/key.png}">
-	      </div>
-	      <input name="code" placeholder='验证码' maxlength="4" type='text' autocomplete="off">
-	      <div class='validation' style="opacity: 1; right: -5px;top: -3px;">
-          <canvas class="J_codeimg" id="myCanvas" onclick="Code();">对不起，您的浏览器不支持canvas，请下载最新版浏览器!</canvas>
-	      </div>
-	    </div>
-	    <div class='login_fields__submit'>
-	      <input type='button' value='登录'>
-	    </div>
+		<form id="login_form" th:action="@{/user/login}" method="post">
+		<div class='login_fields__user'>
+		  <div class='icon'>
+			<img alt="" th:src="@{/img/user_icon_copy.png}">
+		  </div>
+		  <input name="username" placeholder='用户名' maxlength="16" type='text' value="18092853734"/>
+			<div class='validation'>
+			  <img alt="" th:src="@{/img/tick.png}">
+			</div>
+		</div>
+		<div class='login_fields__password'>
+		  <div class='icon'>
+			<img alt="" th:src="@{/img/lock_icon_copy.png}">
+		  </div>
+		  <input name="password" placeholder='密码' maxlength="16" type='text' value="123"/>
+		  <div class='validation'>
+			<img alt="" th:src="@{/img/tick.png}">
+		  </div>
+		</div>
+		<div class='login_fields__password'>
+		  <div class='icon'>
+			<img alt="" th:src="@{/img/key.png}">
+		  </div>
+		  <input name="code" placeholder='验证码' maxlength="4" type='text'>
+		  <div class='validation' style="opacity: 1; right: -5px;top: -3px;">
+		  <canvas class="J_codeimg" id="myCanvas" onclick="Code();">对不起，您的浏览器不支持canvas，请下载最新版浏览器!</canvas>
+		  </div>
+		</div>
+		<div class='login_fields__submit'>
+		  <input type='button' value='登录'>
+		</div>
+		</form>
 	  </div>
 	  <div class='success'></div>
 	  <div class='disclaimer'>
 	    <p>欢迎登陆后台管理系统</p>
 	  </div>
 	</div>
-	<div class='authent'>
-	  <div class="loader" style="height: 44px;width: 44px;margin-left: 28px;">
-        <div class="loader-inner ball-clip-rotate-multiple">
-            <div></div>
-            <div></div>
-            <div></div>
-        </div>
-        </div>
-	  <p>认证中...</p>
-	</div>
+
 	<div class="OverWindows"></div>
 	<script type="text/javascript" th:src="@{/js/jquery-2.1.1.min.js}"></script>
 	<script type="text/javascript" th:src="@{/js/jquery-ui.min.js}"></script>

@@ -11,16 +11,6 @@ function AjaxPost(Url,JsonData,LodingFun,ReturnFun) {
         success: ReturnFun
     });
 }
-//示例
-//AjaxPost("ajax调用路径", ajax传参,
-//                function () {
-//                     //ajax加载中
-//                },
-//                function (data) {
-//                    //ajax返回 
-//                    //AjaxErro(data);
-//                })
-
 
 //弹出
 function ErrorAlert(e) {
@@ -32,8 +22,8 @@ function ErrorAlert(e) {
 
 //Ajax 错误返回处理
 function AjaxError(e) {
-    if (e.Status === "Erro") {
-        switch (e.Erro) {
+    if (e.Status === "Error") {
+        switch (e.Error) {
             case "500":
                 top.location.href = '/Erro/Erro500';
                 break;
@@ -82,7 +72,8 @@ function setCookie(name, value, hours, path) {
     _expires = (typeof hours) === "string" ? "" : ";expires=" + expires.toUTCString();
     document.cookie = name + "=" + value + _expires + path;
 }
-//cookie名获取值  
+
+//cookie名获取值
 function getCookieValue(name) {
     name = escape(name);
     //读cookie属性，这将返回文档的所有cookie     

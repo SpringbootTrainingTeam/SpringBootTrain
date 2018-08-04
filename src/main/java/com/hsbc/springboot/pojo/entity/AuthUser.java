@@ -9,6 +9,7 @@ import java.util.List;
 
 
 public class AuthUser extends BootUser implements UserDetails {
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> auths = new ArrayList<>();
