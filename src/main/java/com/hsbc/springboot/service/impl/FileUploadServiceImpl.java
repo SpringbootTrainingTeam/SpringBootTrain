@@ -1,14 +1,19 @@
 package com.hsbc.springboot.service.impl;
 
 import com.hsbc.springboot.config.FileStorageProperties;
+import com.hsbc.springboot.dao.FileUploadRepository;
+import com.hsbc.springboot.dao.UserRepository;
 import com.hsbc.springboot.exception.FileStorageException;
 import com.hsbc.springboot.exception.MyFileNotFoundException;
 import com.hsbc.springboot.pojo.dto.FileDTO;
+import com.hsbc.springboot.pojo.entity.BootFile;
+import com.hsbc.springboot.pojo.entity.BootUser;
 import com.hsbc.springboot.service.api.FileUploadService;
-import org.hibernate.criterion.Example;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.data.domain.Example;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,6 +27,12 @@ import java.util.List;
 
 @Service
 public class FileUploadServiceImpl implements FileUploadService {
+
+    @Autowired
+    private FileUploadRepository fileUploadRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     private final Path fileStorageLocation;
 
@@ -87,8 +98,26 @@ public class FileUploadServiceImpl implements FileUploadService {
         return null;
     }
 
+    /**
+     *  delete file by FileId
+     * @param id file id
+     */
     @Override
     public void deleteFileById(Long id) {
 
+        /*String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        BootUser bootUser = userRepository.findByUsername(username);
+        BootFile bootFile=new BootFile();
+        bootFile.setUserId(bootUser.getId());
+        Example<BootFile> example = Example.of(bootFile);
+         List<BootFile> bootFiles = fileUploadRepository.findAll(example);
+*/
+
+
+
+
+
+        fileUploadRepository.deleteById(id);
     }
 }

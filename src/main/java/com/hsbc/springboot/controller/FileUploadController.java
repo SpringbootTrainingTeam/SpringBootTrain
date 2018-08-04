@@ -1,6 +1,7 @@
 package com.hsbc.springboot.controller;
 
 import com.hsbc.springboot.pojo.vo.UploadFileResponse;
+import com.hsbc.springboot.service.api.FileUploadService;
 import com.hsbc.springboot.service.impl.FileUploadServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +31,9 @@ public class FileUploadController {
     public FileUploadController(FileUploadServiceImpl fileStorageService) {
         this.fileStorageService = fileStorageService;
     }
+
+    @Autowired
+    private FileUploadService fileUploadService;
 
     @PostMapping("/uploadFile")
     public UploadFileResponse uploadFile(@RequestParam("file") MultipartFile file) {
@@ -81,4 +85,18 @@ public class FileUploadController {
     public String indexUI() {
         return "Hello World";
     }
+
+    //接受页面传递的fileId;
+    private Long fileId;
+
+    public void setFileId(Long fileId) {
+        this.fileId = fileId;
+    }
+
+    @DeleteMapping("/fileId")
+    public void deleteFileById(){
+        fileUploadService.deleteFileById(fileId);
+    }
+
+
 }

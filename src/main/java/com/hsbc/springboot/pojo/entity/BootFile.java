@@ -16,7 +16,7 @@ public class BootFile {
     @Column(length = 50)
     private String name;
 
-    private Short userId;
+    private Integer userId;
     private Date uploadTime;
 
     public Long getId() {
@@ -43,11 +43,11 @@ public class BootFile {
         this.name = name;
     }
 
-    public Short getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(Short userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 
