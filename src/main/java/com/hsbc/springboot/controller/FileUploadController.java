@@ -91,6 +91,4 @@ public class FileUploadController {
     public void deleteFileById(@PathVariable Long fileId){
         fileUploadService.deleteFileById(fileId);
     }
-
-
 }
