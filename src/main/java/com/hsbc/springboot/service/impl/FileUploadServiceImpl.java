@@ -105,19 +105,6 @@ public class FileUploadServiceImpl implements FileUploadService {
     @Override
     public void deleteFileById(Long id) {
 
-        /*String username = SecurityContextHolder.getContext().getAuthentication().getName();
-
-        BootUser bootUser = userRepository.findByUsername(username);
-        BootFile bootFile=new BootFile();
-        bootFile.setUserId(bootUser.getId());
-        Example<BootFile> example = Example.of(bootFile);
-         List<BootFile> bootFiles = fileUploadRepository.findAll(example);
-*/
-
-
-
-
-
         fileUploadRepository.deleteById(id);
     }
 }

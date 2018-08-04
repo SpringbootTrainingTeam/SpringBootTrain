@@ -86,15 +86,9 @@ public class FileUploadController {
         return "Hello World";
     }
 
-    //接受页面传递的fileId;
-    private Long fileId;
 
-    public void setFileId(Long fileId) {
-        this.fileId = fileId;
-    }
-
-    @DeleteMapping("/fileId")
-    public void deleteFileById(){
+    @DeleteMapping("/fileId/{fileId}")
+    public void deleteFileById(@PathVariable Long fileId){
         fileUploadService.deleteFileById(fileId);
     }
 
