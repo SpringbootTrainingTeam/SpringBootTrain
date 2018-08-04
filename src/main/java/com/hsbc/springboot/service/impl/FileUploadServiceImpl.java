@@ -12,6 +12,7 @@ import org.hibernate.criterion.Example;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -102,9 +104,9 @@ public class FileUploadServiceImpl implements FileUploadService {
     }
 
     @Override
-    public List<FileDTO> fileListbyUserId(Integer userId) {
-
-        List<BootFile> bootFiles = fileUploadRepository.findByUserId(userId);
+    public List<FileDTO> fileListbyUserId() {
+        AuthUser authUser  = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        List<BootFile> bootFiles = fileUploadRepository.findByUserId(authUser.getId());
         ArrayList<FileDTO> fileDTOS = new ArrayList<>();
         bootFiles.stream().forEach(bootFile -> {
             FileDTO fileDTO = new FileDTO();
