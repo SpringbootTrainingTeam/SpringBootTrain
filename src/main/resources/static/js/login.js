@@ -1,9 +1,5 @@
 var canGetCookie = 0;//是否支持存储Cookie 0 不支持 1 支持
 var ajaxmockjax = 1;//是否启用虚拟Ajax的请求响 0 不启用  1 启用
-//默认账号密码
-
-var truelogin = "admin";
-var truepwd = "123";
 
 var CodeVal = 0;
 Code();
@@ -61,11 +57,11 @@ $('input[name="login"],input[name="pwd"]').keyup(function () {
 });
 
 layui.use('layer', function () {
-    var msgalert = '默认账号:' + truelogin + '<br/> 默认密码:' + truepwd;
-    var index = layer.alert(msgalert, { icon: 6, time: 4000, offset: 't', closeBtn: 0, title: '友情提示', btn: [], anim: 2, shade: 0 });
-    layer.style(index, {
-        color: '#777'
-    });
+    // var msgalert = '默认账号:' + truelogin + '<br/> 默认密码:' + truepwd;
+    // var index = layer.alert(msgalert, { icon: 6, time: 4000, offset: 't', closeBtn: 0, title: '友情提示', btn: [], anim: 2, shade: 0 });
+    // layer.style(index, {
+    //     color: '#777'
+    // });
     //非空验证
     $('input[type="button"]').click(function () {
         var login = $('input[name="login"]').val();
@@ -99,16 +95,11 @@ layui.use('layer', function () {
             //登陆
             var JsonData = { login: login, pwd: pwd, code: code };
             //此处做为ajax内部判断
-            var url = "";
-            if(JsonData.login === truelogin && JsonData.pwd === truepwd && JsonData.code.toUpperCase() === CodeVal.toUpperCase()){
-                url = "Ajax/Login";
-            }else{
-                url = "Ajax/LoginFalse";
-            }
-
+            let url = "/login";
 
             AjaxPost(url, JsonData, function () {
                     //ajax加载中
+                    console.log("start to login...")
                 },
                 function (data) {
                     //ajax返回
@@ -128,7 +119,7 @@ layui.use('layer', function () {
                     setTimeout(function () {
                         $('.authent').hide();
                         $('.login').removeClass('test');
-                        if (data.Status == 'ok') {
+                        if (data.Status === 'ok') {
                             //登录成功
                             $('.login div').fadeOut(100);
                             $('.success').fadeIn(1000);
@@ -136,7 +127,7 @@ layui.use('layer', function () {
                             //跳转操作
 
                         } else {
-                            AjaxErro(data);
+                            AjaxError(data);
                         }
                     }, 2400);
                 })

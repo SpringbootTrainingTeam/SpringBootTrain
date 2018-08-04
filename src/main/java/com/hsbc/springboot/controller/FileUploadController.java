@@ -73,9 +73,4 @@ public class FileUploadController {
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
                 .body(resource);
     }
-
-    @GetMapping("/")
-    public String indexUI() {
-        return "Hello World";
-    }
 }

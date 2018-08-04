@@ -42,9 +42,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .and().formLogin().loginPage("/index")
                 .loginProcessingUrl("/login").defaultSuccessUrl("/repository",true)
-                .failureUrl("/login?error").permitAll()
-                .and().sessionManagement().invalidSessionUrl("/sign_in")
-                .and().rememberMe().tokenValiditySeconds(1209600)
+                .failureUrl("/error?error").permitAll()
+//                .and().sessionManagement().invalidSessionUrl("/sign_in")
+//                .and().rememberMe().tokenValiditySeconds(1209600)
                 .and().logout().logoutSuccessUrl("/logout").permitAll()
                 .and().csrf().disable();
     }
