@@ -25,6 +25,6 @@ public class BootFile {
     @Column(length = 50)
     private String name;
 
-    private Short userId;
+    private Integer userId;
     private Date uploadTime;
 }
