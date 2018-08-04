@@ -30,7 +30,7 @@ public interface FileUploadService {
      * @param userId user id
      * @return user's file list
      */
-    List<FileDTO> fileList(Short userId);
+    List<FileDTO> fileListbyUserId(Integer userId);
 
     /**
      * delete file by file id
