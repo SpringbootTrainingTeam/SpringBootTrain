@@ -2,8 +2,10 @@ package com.hsbc.springboot.dao;
 
 import com.hsbc.springboot.pojo.entity.BootFile;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
+import java.util.List;
 
 @Repository
 public interface FileUploadRepository extends JpaRepository<BootFile, Long>, PagingAndSortingRepository<BootFile, Long> {
@@ -16,4 +18,7 @@ public interface FileUploadRepository extends JpaRepository<BootFile, Long>, Pag
 
     @Override
     void deleteById(Long aLong);
+
+    @Query(value = "select * from boot_file bf where bf.user_id = ?1", nativeQuery = true)
+    List<BootFile> findByUserId(Integer userId);
 }

@@ -6,7 +6,8 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UserRepository extends JpaRepository<BootUser, Short>, PagingAndSortingRepository<BootUser, Short> {
+public interface UserRepository extends JpaRepository<BootUser, Integer>, PagingAndSortingRepository<BootUser, Integer> {
+
 
     @Override
     <S extends BootUser> S save(S s);
