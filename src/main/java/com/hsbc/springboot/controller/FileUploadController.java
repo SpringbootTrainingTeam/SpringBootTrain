@@ -1,6 +1,8 @@
 package com.hsbc.springboot.controller;
 
+import com.hsbc.springboot.pojo.dto.FileDTO;
 import com.hsbc.springboot.pojo.vo.UploadFileResponse;
+import com.hsbc.springboot.service.api.FileUploadService;
 import com.hsbc.springboot.service.impl.FileUploadServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +23,10 @@ import java.util.stream.Collectors;
 @RestController
 public class FileUploadController {
 
-    private final FileUploadServiceImpl fileStorageService;
+    private final FileUploadService fileStorageService ;
 
     @Autowired
-    public FileUploadController(FileUploadServiceImpl fileStorageService) {
+    public FileUploadController(FileUploadService fileStorageService) {
         this.fileStorageService = fileStorageService;
     }
 
@@ -72,5 +74,11 @@ public class FileUploadController {
                 .contentType(MediaType.parseMediaType(contentType))
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
                 .body(resource);
+    }
+
+    @GetMapping("/findAll")
+    public List<FileDTO> fileListbyUserId(){
+        List<FileDTO> fileDTOS = fileStorageService.fileListbyUserId();
+        return fileDTOS;
     }
 }
