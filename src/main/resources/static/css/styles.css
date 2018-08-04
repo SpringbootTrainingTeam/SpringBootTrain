@@ -74,8 +74,7 @@ body .test {
   -webkit-filter: blur(1px);
           filter: blur(1px);
 }
-body .login 
-{
+body .login {
   box-shadow: -15px 15px 15px rgba(6, 17, 47, 0.7);
   opacity: 1;
   top: 20px;
@@ -114,6 +113,47 @@ body .login
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='rgba(53, 57, 74, 0)', endColorstr='rgb(0, 0, 0)',GradientType=1 );
   /* IE6-9 fallback on horizontal gradient */
 }
+
+body .upload_fields {
+  box-shadow: -15px 15px 15px rgba(6, 17, 47, 0.7);
+  opacity: 1;
+  top: 20px;
+  -webkit-transition-timing-function: cubic-bezier(0.68, -0.25, 0.265, 0.85);
+  -webkit-transition-property: -webkit-transform,opacity,box-shadow,top,left;
+          transition-property: transform,opacity,box-shadow,top,left;
+  -webkit-transition-duration: .5s;
+          transition-duration: .5s;
+  -webkit-transform-origin: 161px 100%;
+      -ms-transform-origin: 161px 100%;
+          transform-origin: 161px 100%;
+  -webkit-transform: rotateX(0deg);
+          transform: rotateX(0deg);
+  position: relative;
+  width: 560px;
+  /*border-top: 2px solid #D8312A;*/
+  height: 100px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: auto;
+  top: 0;
+  bottom: 0;
+  padding: 100px 40px 40px 40px;
+  background: #35394a;
+  text-align: center;
+  /* Old browsers */
+  /* FF3.6+ */
+  background: -webkit-gradient(linear, left bottom, right top, color-stop(0%, #35394a), color-stop(100%, rgb(0, 0, 0)));
+  /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(230deg, rgba(53, 57, 74, 0) 0%, rgb(0, 0, 0) 100%);
+  /* Chrome10+,Safari5.1+ */
+  /* Opera 11.10+ */
+  /* IE10+ */
+  background: linear-gradient(230deg, rgba(53, 57, 74, 0) 0%, rgb(0, 0, 0) 100%);
+  /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='rgba(53, 57, 74, 0)', endColorstr='rgb(0, 0, 0)',GradientType=1 );
+  /* IE6-9 fallback on horizontal gradient */
+}
 body .login .validation {
   position: absolute;
   z-index: 1;
@@ -134,10 +174,10 @@ body .login_title {
   font-size: 16px;
 }
 body .login_fields {
-  height: 208px;
-  position: absolute;
-  left: 0;
-}
+   height: 208px;
+   position: absolute;
+   left: 0;
+ }
 body .login_fields .icon {
   position: absolute;
   z-index: 1;
