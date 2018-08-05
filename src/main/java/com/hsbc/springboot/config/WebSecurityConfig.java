@@ -40,7 +40,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/css/**", "/js/**", "/img/**", "/layui/**").permitAll()
                 .anyRequest().authenticated()
                 .and().formLogin().loginPage("/index").permitAll().loginProcessingUrl("/user/login")
-                .defaultSuccessUrl("/repository",true).permitAll()
+                .defaultSuccessUrl("/upload",true).permitAll()
                 .failureUrl("/error").permitAll()
                 .and().logout()
                 .logoutSuccessUrl("/index").permitAll()

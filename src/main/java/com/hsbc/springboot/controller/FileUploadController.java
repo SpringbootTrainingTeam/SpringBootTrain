@@ -3,7 +3,6 @@ package com.hsbc.springboot.controller;
 import com.hsbc.springboot.pojo.dto.FileDTO;
 import com.hsbc.springboot.pojo.vo.UploadFileResponse;
 import com.hsbc.springboot.service.api.FileUploadService;
-import com.hsbc.springboot.service.impl.FileUploadServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -26,12 +25,12 @@ public class FileUploadController {
     private final FileUploadService fileStorageService ;
 
     @Autowired
-    public FileUploadController(FileUploadService fileStorageService) {
+    public FileUploadController(FileUploadService fileStorageService, FileUploadService fileUploadService) {
         this.fileStorageService = fileStorageService;
+        this.fileUploadService = fileUploadService;
     }
 
-    @Autowired
-    private FileUploadService fileUploadService;
+    private final FileUploadService fileUploadService;
 
     @PostMapping("/uploadFile")
     public UploadFileResponse uploadFile(@RequestParam("file") MultipartFile file) {
