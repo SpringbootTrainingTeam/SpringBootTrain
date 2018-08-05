@@ -32,6 +32,19 @@ public class FileUploadController {
     private final FileUploadService fileUploadService;
 
     @PostMapping("/uploadFile")
+    public UploadFileResponse uploadFile(@RequestParam("file") MultipartFile file) {
+        String fileName = fileStorageService.storeFile(file);
+
+        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/downloadFile/")
+                .path(fileName)
+                .toUriString();
+
+
+        return new UploadFileResponse(fileName, fileDownloadUri,
+                file.getContentType(), file.getSize());
+    }
+
     public void uploadFile(@RequestParam("file") MultipartFile file, HttpServletResponse response) {
         try {
             fileStorageService.storeFile(file);

@@ -38,18 +38,32 @@ public class FileUploadServiceImpl implements FileUploadService {
 
     private final FileUploadRepository fileUploadRepository;
 
+    AuthUser authUser = null;
+
+    String currentUsername = null;
+
     @Autowired
     public FileUploadServiceImpl(FileStorageProperties fileStorageProperties, FileUploadRepository fileUploadRepository) {
         this.fileStorageLocation = Paths.get(fileStorageProperties.getUploadDir())
                 .toAbsolutePath().normalize();
-        try {
-            Files.createDirectories(this.fileStorageLocation);
-        } catch (Exception ex) {
-            throw new FileStorageException("Could not create the directory where the uploaded files will be stored.", ex);
-        }
+//        try {
+//            Files.createDirectories(this.fileStorageLocation);
+//        } catch (Exception ex) {
+//            throw new FileStorageException("Could not create the directory where the uploaded files will be stored.", ex);
+//        }
 
         this.fileStorageProperties = fileStorageProperties;
         this.fileUploadRepository = fileUploadRepository;
+    }
+
+    private void getAuthUser() {
+        SecurityContext context = SecurityContextHolder.getContext();
+
+        if (context.getAuthentication() != null) {
+            authUser = (AuthUser) context.getAuthentication().getPrincipal();
+            currentUsername = authUser.getUsername();
+        }
+
     }
 
     /**
@@ -60,15 +74,25 @@ public class FileUploadServiceImpl implements FileUploadService {
     public String storeFile(MultipartFile file) {
         // Normalize file name
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+        getAuthUser();
 
         try {
             // Check if the file's name contains invalid characters
             if(fileName.contains("..")) {
                 throw new FileStorageException("Sorry! Filename contains invalid path sequence " + fileName);
             }
+            if (currentUsername == null) {
+                throw new FileStorageException("sorry! Current User invalid" + currentUsername);
+            }
+
+            try {
+                Files.createDirectories(this.fileStorageLocation.resolve(currentUsername));
+            } catch (IOException ex) {
+                throw new FileStorageException("Could not create the directory where the uploaded files will be stored.", ex);
+            }
 
             // Copy file to the target location (Replacing existing file with the same name)
-            Path targetLocation = this.fileStorageLocation.resolve(fileName);
+            Path targetLocation = this.fileStorageLocation.resolve(currentUsername).resolve(fileName);
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 
             BootFile bootFile = new BootFile();
@@ -76,15 +100,9 @@ public class FileUploadServiceImpl implements FileUploadService {
             bootFile.setPath(targetLocation.toString());
             bootFile.setUploadTime(new Date());
 
-            SecurityContext context = SecurityContextHolder.getContext();
-
-            if (context.getAuthentication() != null) {
-                AuthUser authUser = (AuthUser) context.getAuthentication().getPrincipal();
+            if (authUser != null) {
                 bootFile.setUserId(authUser.getId());
             }
-
-//            AuthUser authUser  = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
 
             fileUploadRepository.save(bootFile);
 
@@ -98,8 +116,9 @@ public class FileUploadServiceImpl implements FileUploadService {
      * @see FileUploadService#loadFileAsResource(String)
      */
     public Resource loadFileAsResource(String fileName) {
+        getAuthUser();
         try {
-            Path filePath = this.fileStorageLocation.resolve(fileName).normalize();
+            Path filePath = this.fileStorageLocation.resolve(currentUsername).resolve(fileName).normalize();
             Resource resource = new UrlResource(filePath.toUri());
             if(resource.exists()) {
                 return resource;
