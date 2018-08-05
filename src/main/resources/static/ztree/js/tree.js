@@ -1,5 +1,6 @@
 $(function() {
     var zTreeObj;
+    var zTreeNodes;
     var setting = {
         view: {
             selectedMulti: false

@@ -1,7 +1,6 @@
 package com.hsbc.springboot.controller;
 
 import com.hsbc.springboot.pojo.dto.FileDTO;
-import com.hsbc.springboot.pojo.vo.UploadFileResponse;
 import com.hsbc.springboot.service.api.FileUploadService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,19 +31,6 @@ public class FileUploadController {
     private final FileUploadService fileUploadService;
 
     @PostMapping("/uploadFile")
-    public UploadFileResponse uploadFile(@RequestParam("file") MultipartFile file) {
-        String fileName = fileStorageService.storeFile(file);
-
-        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/downloadFile/")
-                .path(fileName)
-                .toUriString();
-
-
-        return new UploadFileResponse(fileName, fileDownloadUri,
-                file.getContentType(), file.getSize());
-    }
-
     public void uploadFile(@RequestParam("file") MultipartFile file, HttpServletResponse response) {
         try {
             fileStorageService.storeFile(file);
@@ -94,9 +80,8 @@ public class FileUploadController {
 
     @GetMapping("/findAll")
     @ResponseBody
-    public List<FileDTO> fileListbyUserId(){
-        List<FileDTO> fileDTOS = fileStorageService.fileListbyUserId();
-        return fileDTOS;
+    public List<FileDTO> fileListByUserId(){
+        return fileStorageService.fileListbyUserId();
     }
 
 
