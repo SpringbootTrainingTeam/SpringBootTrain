@@ -174,8 +174,7 @@ public class FileUploadServiceImpl implements FileUploadService {
 
         File userRoot = new File(fileStorageProperties.getUploadDir(), username);
         List<NodeEntity> nodes = new ArrayList<>(16);
-        List<NodeEntity> nodesByUsername = getNodesByUsername(nodes, userRoot);
-        return nodesByUsername;
+        return getNodesByUsername(nodes, userRoot);
     }
 
     private List<NodeEntity> getNodesByUsername(List<NodeEntity> nodes, File userRoot) {

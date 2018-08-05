@@ -53,17 +53,17 @@ layui.use('layer', function () {
                 $('.login').addClass('testtwo'); //平移特效
             }, 300);
 
-            // setTimeout(function () {
-            //     $('.authentication').show().animate({ right: -320 }, {
-            //         easing: 'easeOutQuint',
-            //         duration: 600,
-            //         queue: false
-            //     });
-            //     // $('.authent').animate({ opacity: 1 }, {
-            //     //     duration: 200,
-            //     //     queue: false
-            //     // }).addClass('visible');
-            // }, 500);
+            setTimeout(function () {
+                $('.authentication').show().animate({ right: -320 }, {
+                    easing: 'easeOutQuint',
+                    duration: 600,
+                    queue: false
+                });
+                $('.authentication').animate({ opacity: 1 }, {
+                    duration: 200,
+                    queue: false
+                }).addClass('visible');
+            }, 500);
         }
     })
 });

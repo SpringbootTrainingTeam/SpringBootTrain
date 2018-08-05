@@ -5,14 +5,15 @@ $(function() {
             showLine:true,
             selectedMulti:true,
             showIcon:true,
-            fontCss:{color:"black"},
+            fontCss:{color:"white"},
             showTitle:true
         },
         data: {
             simpleData:{
+                enable: true,
                 idKey:"id",
                 pIdKey:"pid",
-                rootPId:""
+                rootPId:"./uploads"
             }
         },
         callback: {}
@@ -22,7 +23,6 @@ $(function() {
         url:"/document/list",
         type:"get",
         success: function (data) {
-            alert(data);
             $.fn.zTree.init($(".ztree"), setting, data);
         }
     })
