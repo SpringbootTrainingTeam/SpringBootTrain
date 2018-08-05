@@ -27,4 +27,5 @@ public class BootFile {
 
     private Integer userId;
     private Date uploadTime;
+
 }

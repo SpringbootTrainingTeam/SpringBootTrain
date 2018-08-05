@@ -5,16 +5,13 @@ import com.hsbc.springboot.dao.FileUploadRepository;
 import com.hsbc.springboot.exception.FileStorageException;
 import com.hsbc.springboot.exception.MyFileNotFoundException;
 import com.hsbc.springboot.pojo.dto.FileDTO;
-import com.hsbc.springboot.pojo.entity.AuthUser;
 import com.hsbc.springboot.pojo.entity.BootFile;
+import com.hsbc.springboot.pojo.entity.AuthUser;
 import com.hsbc.springboot.service.api.FileUploadService;
-import org.hibernate.criterion.Example;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,7 +22,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -121,6 +117,10 @@ public class FileUploadServiceImpl implements FileUploadService {
         return fileDTOS;
     }
 
+    /**
+     *  delete file by FileId
+     * @param id file id
+     */
     @Override
     public void deleteFileById(Long id) {
         fileUploadRepository.deleteById(id);

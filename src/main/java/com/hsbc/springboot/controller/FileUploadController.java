@@ -30,6 +30,9 @@ public class FileUploadController {
         this.fileStorageService = fileStorageService;
     }
 
+    @Autowired
+    private FileUploadService fileUploadService;
+
     @PostMapping("/uploadFile")
     public UploadFileResponse uploadFile(@RequestParam("file") MultipartFile file) {
         String fileName = fileStorageService.storeFile(file);
@@ -80,5 +83,11 @@ public class FileUploadController {
     public List<FileDTO> fileListbyUserId(){
         List<FileDTO> fileDTOS = fileStorageService.fileListbyUserId();
         return fileDTOS;
+    }
+
+
+    @DeleteMapping("/delete/{fileId}")
+    public void deleteFileById(@PathVariable Long fileId){
+        fileUploadService.deleteFileById(fileId);
     }
 }
