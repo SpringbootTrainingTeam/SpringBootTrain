@@ -9,17 +9,19 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
-@RestController
+@Controller
 public class FileUploadController {
 
     private final FileUploadService fileStorageService ;
@@ -33,28 +35,30 @@ public class FileUploadController {
     private final FileUploadService fileUploadService;
 
     @PostMapping("/uploadFile")
-    public UploadFileResponse uploadFile(@RequestParam("file") MultipartFile file) {
-        String fileName = fileStorageService.storeFile(file);
-
-        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/downloadFile/")
-                .path(fileName)
-                .toUriString();
-
-
-        return new UploadFileResponse(fileName, fileDownloadUri,
-                file.getContentType(), file.getSize());
+    public void uploadFile(@RequestParam("file") MultipartFile file, HttpServletResponse response) {
+        try {
+            fileStorageService.storeFile(file);
+            response.sendRedirect("/repository");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @PostMapping("/uploadMultipleFiles")
-    public List<UploadFileResponse> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
-        return Arrays.asList(files)
-                .stream()
-                .map(file -> uploadFile(file))
-                .collect(Collectors.toList());
+    public void uploadMultipleFiles(@RequestParam("files") MultipartFile[] files, HttpServletResponse response) {
+
+        try {
+            for (MultipartFile file : files) {
+                fileStorageService.storeFile(file);
+            }
+            response.sendRedirect("/repository");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @GetMapping("/downloadFile/{fileName:.+}")
+    @ResponseBody
     public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) {
         // Load file as Resource
         Resource resource = fileStorageService.loadFileAsResource(fileName);
@@ -79,6 +83,7 @@ public class FileUploadController {
     }
 
     @GetMapping("/findAll")
+    @ResponseBody
     public List<FileDTO> fileListbyUserId(){
         List<FileDTO> fileDTOS = fileStorageService.fileListbyUserId();
         return fileDTOS;
