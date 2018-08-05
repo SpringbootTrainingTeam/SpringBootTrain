@@ -1,6 +1,7 @@
 package com.hsbc.springboot.service.api;
 
 import com.hsbc.springboot.pojo.dto.FileDTO;
+import com.hsbc.springboot.pojo.entity.NodeEntity;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,7 +29,7 @@ public interface FileUploadService {
      * find file list by user id
      * @return user's file list
      */
-    List<FileDTO> fileListbyUserId();
+    List<FileDTO> fileListByUserId();
 
     /**
      * delete file by file id
@@ -36,4 +37,11 @@ public interface FileUploadService {
      * @param id file id
      */
     void deleteFileById(Long id);
+
+    /**
+     * find file list by username
+     *
+     * @return tree nodes list
+     */
+    List<NodeEntity> findDocumentListByUsername() throws IllegalAccessException;
 }

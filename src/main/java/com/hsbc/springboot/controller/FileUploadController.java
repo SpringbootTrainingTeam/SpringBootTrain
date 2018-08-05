@@ -1,6 +1,7 @@
 package com.hsbc.springboot.controller;
 
 import com.hsbc.springboot.pojo.dto.FileDTO;
+import com.hsbc.springboot.pojo.entity.NodeEntity;
 import com.hsbc.springboot.service.api.FileUploadService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,12 +82,18 @@ public class FileUploadController {
     @GetMapping("/findAll")
     @ResponseBody
     public List<FileDTO> fileListByUserId(){
-        return fileStorageService.fileListbyUserId();
+        return fileStorageService.fileListByUserId();
     }
 
 
     @DeleteMapping("/delete/{fileId}")
     public void deleteFileById(@PathVariable Long fileId){
         fileUploadService.deleteFileById(fileId);
+    }
+
+    @GetMapping("/document/list")
+    @ResponseBody
+    public List<NodeEntity> getDocumentListByUsername() throws IllegalAccessException {
+        return fileUploadService.findDocumentListByUsername();
     }
 }

@@ -37,7 +37,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/css/**", "/js/**", "/img/**", "/layui/**").permitAll()
+                .antMatchers("/css/**", "/js/**", "/img/**", "/layui/**", "/ztree/**").permitAll()
                 .anyRequest().authenticated()
                 .and().formLogin().loginPage("/index").permitAll().loginProcessingUrl("/user/login")
                 .defaultSuccessUrl("/upload",true).permitAll()
