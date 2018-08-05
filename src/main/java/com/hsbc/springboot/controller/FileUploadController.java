@@ -86,7 +86,7 @@ public class FileUploadController {
     }
 
 
-    @DeleteMapping("/fileId/{fileId}")
+    @DeleteMapping("/delete/{fileId}")
     public void deleteFileById(@PathVariable Long fileId){
         fileUploadService.deleteFileById(fileId);
     }
