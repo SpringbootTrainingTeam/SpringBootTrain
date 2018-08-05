@@ -62,20 +62,23 @@ public class SpringbootTrainApplicationTests {
         Path folder = fileStorageService.getFileStorageLocation();
 
         String fileName = "test.txt";
+
         File file = new File(folder.resolve(fileName).toString());
+
         //delete if exits
         file.delete();
-        System.out.println(folder.resolve(fileName).toString());
+
+//        System.out.println(folder.resolve(fileName1).toString());
 
         MockMultipartFile mockMultipartFile = new MockMultipartFile("file",
-                fileName, "text/plain", "text body".getBytes());
+                fileName, "text/plain", "text1 body".getBytes());
+
         MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.multipart("/uploadFile")
                 .file(mockMultipartFile);
 
         this.mockMvc.perform(builder).andExpect(ok)
                 .andDo(MockMvcResultHandlers.print());
         Assert.assertTrue(file.exists());
-
     }
 
     @Test

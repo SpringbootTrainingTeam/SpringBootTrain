@@ -44,6 +44,7 @@ public class FileUploadController {
 
         return new UploadFileResponse(fileName, fileDownloadUri,
                 file.getContentType(), file.getSize());
+
     }
 
     @PostMapping("/uploadMultipleFiles")
