@@ -43,7 +43,6 @@ public class FileUploadController {
                 .path(fileName)
                 .toUriString();
 
-
         return new UploadFileResponse(fileName, fileDownloadUri,
                 file.getContentType(), file.getSize());
     }

@@ -44,8 +44,8 @@ public class FileUploadServiceImpl implements FileUploadService {
 
     @Autowired
     public FileUploadServiceImpl(FileStorageProperties fileStorageProperties, FileUploadRepository fileUploadRepository) {
-        this.fileStorageLocation = Paths.get(fileStorageProperties.getUploadDir())
-                .toAbsolutePath().normalize();
+        this.fileStorageLocation = Paths.get(fileStorageProperties.getUploadDir()).normalize();
+
 //        try {
 //            Files.createDirectories(this.fileStorageLocation);
 //        } catch (Exception ex) {
@@ -63,7 +63,6 @@ public class FileUploadServiceImpl implements FileUploadService {
             authUser = (AuthUser) context.getAuthentication().getPrincipal();
             currentUsername = authUser.getUsername();
         }
-
     }
 
     /**
@@ -82,7 +81,7 @@ public class FileUploadServiceImpl implements FileUploadService {
                 throw new FileStorageException("Sorry! Filename contains invalid path sequence " + fileName);
             }
             if (currentUsername == null) {
-                throw new FileStorageException("sorry! Current User invalid" + currentUsername);
+                throw new FileStorageException("sorry! Current User " + currentUsername + " is invalid");
             }
 
             try {
