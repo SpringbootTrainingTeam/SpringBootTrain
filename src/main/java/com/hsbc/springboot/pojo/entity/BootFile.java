@@ -20,7 +20,7 @@ public class BootFile {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 100)
+    @Column(length = 200)
     private String path;
     @Column(length = 50)
     private String name;

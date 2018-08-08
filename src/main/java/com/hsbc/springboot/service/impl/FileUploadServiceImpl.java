@@ -5,14 +5,17 @@ import com.hsbc.springboot.dao.FileUploadRepository;
 import com.hsbc.springboot.exception.FileStorageException;
 import com.hsbc.springboot.exception.MyFileNotFoundException;
 import com.hsbc.springboot.pojo.dto.FileDTO;
-import com.hsbc.springboot.pojo.entity.AuthUser;
 import com.hsbc.springboot.pojo.entity.BootFile;
+import com.hsbc.springboot.pojo.entity.AuthUser;
 import com.hsbc.springboot.service.api.FileUploadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
@@ -25,6 +28,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static org.springframework.transaction.annotation.Propagation.REQUIRED;
+
 @Service
 public class FileUploadServiceImpl implements FileUploadService {
 
@@ -35,35 +40,62 @@ public class FileUploadServiceImpl implements FileUploadService {
 
     private final FileStorageProperties fileStorageProperties;
 
+    AuthUser authUser = null;
+
+    String currentUsername = null;
+
     @Autowired
-    public FileUploadServiceImpl(FileStorageProperties fileStorageProperties) {
+    public FileUploadServiceImpl(FileStorageProperties fileStorageProperties, FileUploadRepository fileUploadRepository) {
+
         this.fileStorageLocation = Paths.get(fileStorageProperties.getUploadDir())
                 .toAbsolutePath().normalize();
-        try {
-            Files.createDirectories(this.fileStorageLocation);
-        } catch (Exception ex) {
-            throw new FileStorageException("Could not create the directory where the uploaded files will be stored.", ex);
-        }
+//        try {
+//            Files.createDirectories(this.fileStorageLocation);
+//        } catch (Exception ex) {
+//            throw new FileStorageException("Could not create the directory where the uploaded files will be stored.", ex);
+//        }
 
         this.fileStorageProperties = fileStorageProperties;
+        this.fileUploadRepository = fileUploadRepository;
+    }
+
+    private void getAuthUser() {
+        SecurityContext context = SecurityContextHolder.getContext();
+
+        if (context.getAuthentication() != null) {
+            authUser = (AuthUser) context.getAuthentication().getPrincipal();
+            currentUsername = authUser.getUsername();
+        }
+
     }
 
     /**
      * @see FileUploadService#storeFile(MultipartFile)
      */
     @Override
+    @Transactional(propagation = REQUIRED)
     public String storeFile(MultipartFile file) {
         // Normalize file name
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+        getAuthUser();
 
         try {
             // Check if the file's name contains invalid characters
             if(fileName.contains("..")) {
                 throw new FileStorageException("Sorry! Filename contains invalid path sequence " + fileName);
             }
+            if (currentUsername == null) {
+                throw new FileStorageException("sorry! Current User invalid" + currentUsername);
+            }
+
+            try {
+                Files.createDirectories(this.fileStorageLocation.resolve(currentUsername));
+            } catch (IOException ex) {
+                throw new FileStorageException("Could not create the directory where the uploaded files will be stored.", ex);
+            }
 
             // Copy file to the target location (Replacing existing file with the same name)
-            Path targetLocation = this.fileStorageLocation.resolve(fileName);
+            Path targetLocation = this.fileStorageLocation.resolve(currentUsername).resolve(fileName);
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 
             BootFile bootFile = new BootFile();
@@ -71,8 +103,9 @@ public class FileUploadServiceImpl implements FileUploadService {
             bootFile.setPath(targetLocation.toString());
             bootFile.setUploadTime(new Date());
 
-            AuthUser authUser  = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            bootFile.setUserId(authUser.getId());
+            if (authUser != null) {
+                bootFile.setUserId(authUser.getId());
+            }
 
             fileUploadRepository.save(bootFile);
 
@@ -86,8 +119,9 @@ public class FileUploadServiceImpl implements FileUploadService {
      * @see FileUploadService#loadFileAsResource(String)
      */
     public Resource loadFileAsResource(String fileName) {
+        getAuthUser();
         try {
-            Path filePath = this.fileStorageLocation.resolve(fileName).normalize();
+            Path filePath = this.fileStorageLocation.resolve(currentUsername).resolve(fileName).normalize();
             Resource resource = new UrlResource(filePath.toUri());
             if(resource.exists()) {
                 return resource;
@@ -105,9 +139,12 @@ public class FileUploadServiceImpl implements FileUploadService {
      */
     @Override
     public List<FileDTO> fileListbyUserId() {
-        AuthUser authUser  = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        List<BootFile> bootFiles = fileUploadRepository.findByUserId(authUser.getId());
         ArrayList<FileDTO> fileDTOS = new ArrayList<>();
+        getAuthUser();
+        if (authUser == null){
+            return fileDTOS;
+        }
+        List<BootFile> bootFiles = fileUploadRepository.findByUserId(authUser.getId());
         bootFiles.stream().forEach(bootFile -> {
             FileDTO fileDTO = new FileDTO();
             fileDTO.setId(bootFile.getId());
@@ -117,12 +154,19 @@ public class FileUploadServiceImpl implements FileUploadService {
             fileDTO.setUserId(bootFile.getUserId());
             fileDTOS.add(fileDTO);
         });
-
         return fileDTOS;
     }
 
+    /**
+     *  delete file by FileId
+     * @param id file id
+     */
     @Override
     public void deleteFileById(Long id) {
         fileUploadRepository.deleteById(id);
+    }
+
+    public Path getFileStorageLocation() {
+        return fileStorageLocation;
     }
 }

@@ -61,7 +61,16 @@
 	    <p>欢迎登陆后台管理系统</p>
 	  </div>
 	</div>
-
+	<div class='authentication'>
+		<div class="loader" style="height: 44px;width: 44px;margin-left: 28px;">
+			<div class="loader-inner ball-clip-rotate-multiple">
+				<div></div>
+				<div></div>
+				<div></div>
+			</div>
+		</div>
+		<p>认证中...</p>
+	</div>
 	<div class="OverWindows"></div>
 	<script type="text/javascript" th:src="@{/js/jquery-2.1.1.min.js}"></script>
 	<script type="text/javascript" th:src="@{/js/jquery-ui.min.js}"></script>
@@ -71,5 +80,7 @@
     <script th:src="@{/js/Treatment.js}" type="text/javascript"></script>
     <script th:src="@{/js/jquery.mockjax.js}" type="text/javascript"></script>
 	<script th:src="@{/js/login.js}" type="text/javascript"></script>
+	<script th:src="@{/js/move.js}" type="text/javascript"></script>
+
 </body>
 </html>

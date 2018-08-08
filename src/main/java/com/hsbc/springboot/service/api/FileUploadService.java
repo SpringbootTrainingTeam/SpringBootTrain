@@ -1,7 +1,6 @@
 package com.hsbc.springboot.service.api;
 
 import com.hsbc.springboot.pojo.dto.FileDTO;
-import com.hsbc.springboot.pojo.entity.BootFile;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 

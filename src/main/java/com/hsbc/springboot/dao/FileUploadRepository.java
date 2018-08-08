@@ -19,6 +19,6 @@ public interface FileUploadRepository extends JpaRepository<BootFile, Long>, Pag
     @Override
     void deleteById(Long aLong);
 
-    @Query(value = "select * from boot_file bf where bf.user_id = ?1", nativeQuery = true)
+    @Query(value = "select * from boot_file bf where bf.user_id = ?", nativeQuery = true)
     List<BootFile> findByUserId(Integer userId);
 }

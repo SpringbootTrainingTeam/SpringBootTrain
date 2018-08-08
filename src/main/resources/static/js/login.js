@@ -30,34 +30,6 @@ $(document).keypress(function (e) {
         $('input[type="button"]').click();
     }
 });
-//粒子背景特效
-$('body').particleground({
-    dotColor: '#E8DFE8',
-    lineColor: '#133b88'
-});
-$('input[name="password"]').focus(function () {
-    $(this).attr('type', 'password');
-});
-$('input[type="text"]').focus(function () {
-    $(this).prev().animate({ 'opacity': '1' }, 200);
-});
-$('input[type="text"],input[type="password"]').blur(function () {
-    $(this).prev().animate({ 'opacity': '.5' }, 200);
-});
-$('input[name="username"],input[name="password"]').keyup(function () {
-    var Len = $(this).val().length;
-    if (!$(this).val() === '' && Len >= 5) {
-        $(this).next().animate({
-            'opacity': '1',
-            'right': '30'
-        }, 200);
-    } else {
-        $(this).next().animate({
-            'opacity': '0',
-            'right': '20'
-        }, 200);
-    }
-});
 
 layui.use('layer', function () {
     //非空验证
@@ -80,17 +52,18 @@ layui.use('layer', function () {
             setTimeout(function () {
                 $('.login').addClass('testtwo'); //平移特效
             }, 300);
-            setTimeout(function () {
-                $('.authent').show().animate({ right: -320 }, {
-                    easing: 'easeOutQuint',
-                    duration: 600,
-                    queue: false
-                });
-                $('.authent').animate({ opacity: 1 }, {
-                    duration: 200,
-                    queue: false
-                }).addClass('visible');
-            }, 500);
+
+            // setTimeout(function () {
+            //     $('.authentication').show().animate({ right: -320 }, {
+            //         easing: 'easeOutQuint',
+            //         duration: 600,
+            //         queue: false
+            //     });
+            //     // $('.authent').animate({ opacity: 1 }, {
+            //     //     duration: 200,
+            //     //     queue: false
+            //     // }).addClass('visible');
+            // }, 500);
         }
     })
 });
@@ -107,3 +80,17 @@ let fullscreen = function () {
         //浏览器不支持全屏API或已被禁用
     }
 };
+if(ajaxmockjax === 1){
+    $.mockjax({
+        url: 'Ajax/Login',
+        status: 200,
+        responseTime: 50,
+        responseText: {"Status":"ok","Text":"登陆成功<br /><br />欢迎回来"}
+    });
+    $.mockjax({
+        url: 'Ajax/LoginFalse',
+        status: 200,
+        responseTime: 50,
+        responseText: {"Status":"Erro","Erro":"账号名或密码或验证码有误"}
+    });
+}
