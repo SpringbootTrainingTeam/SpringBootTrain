@@ -6,7 +6,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 /**
  * this is Git&idea test
  * this is a great software
- * this is wanderful
  */
 
 @SpringBootApplication
